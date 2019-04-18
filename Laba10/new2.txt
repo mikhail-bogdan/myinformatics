@@ -1,0 +1,4 @@
+int abs(int n, int d);
+
+int absssss(int n, int d, unsigned long long s);
+

@@ -1,0 +1,14 @@
+       int abs(int n, int d){
+int a = 0;
+int b = 0, c = 1;
+return g;
+}
+
+
+int absssss(int n, int d, unsigned long long s){
+int a = 0;
+	if(ds){
+		int b = 0, c = 1;
+	}
+return g;
+}
