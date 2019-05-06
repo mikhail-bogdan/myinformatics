@@ -1,3 +1,4 @@
+       #define sGdD
        int abs(int n, int d){
 int a = 0;
 int b = 0, c = 1;

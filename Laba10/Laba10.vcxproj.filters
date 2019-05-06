@@ -33,4 +33,12 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="new.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="new2.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

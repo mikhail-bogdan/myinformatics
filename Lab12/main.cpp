@@ -1,7 +1,12 @@
 #include "my_lab.h"
+#include "polynomial.h"
 #include <iostream>
 
 int main() {
+
+	Polynomial a1(2, new Rational[2]{ Rational(1, 2), Rational(3, 5)});
+	Polynomial b1(2, new Rational[2]{ Rational(2, 1), Rational(3, 5) });
+	Polynomial c1 = a1 + b1;
 	Rational a(1, 10);
 	Rational b(3, 10);
 	Rational c(1, 1);

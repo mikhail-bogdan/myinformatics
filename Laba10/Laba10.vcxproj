@@ -123,6 +123,10 @@
     <ClInclude Include="file_streamer.h" />
     <ClInclude Include="my_lab.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="new.txt" />
+    <Text Include="new2.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

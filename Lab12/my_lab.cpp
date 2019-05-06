@@ -1,7 +1,7 @@
 #include "my_lab.h"
 
 Rational::Rational() {
-	Rational(1, 1);
+	Rational(0, 1);
 }
 
 Rational::Rational(const Rational & rational) {
@@ -15,37 +15,55 @@ Rational::Rational(const Rational * rational) {
 }
 
 Rational::Rational(int numerator, int denumerator) {
-	if (!numerator)
-		this->numerator = 1;
-	else
-		this->numerator = numerator;
+	this->numerator = numerator;
 	if (!denumerator)
-		this->denumerator = 1;
+	{
+		std::cout << "Denumerator equals zero" << std::endl;
+		getchar();
+		getchar();
+		exit(1);
+	}
 	else
 		this->denumerator = denumerator;
 }
 
+Rational::Rational(float value)
+{
+	this->numerator = (int)(value * 100000);
+	this->denumerator = 100000;
+	int n = nod(this->numerator, this->denumerator);
+	this->numerator /= n;
+	this->denumerator /= n;
+}
+
 Rational::~Rational() {}
 
-Rational Rational::operator+(Rational a)
+const Rational & Rational::operator=(const Rational & a)
+{
+	this->numerator = a.numerator;
+	this->denumerator = a.denumerator;
+	return *this;
+}
+
+const Rational & Rational::operator+(const Rational & a)
 {
 	int general_denumerator = nok(this->denumerator, a.denumerator);
 	int general_numerator = this->numerator * (general_denumerator / this->denumerator)
 		+ a.numerator * (general_denumerator / a.denumerator);
 	int n = nod(general_numerator, general_denumerator);
-	return Rational(general_numerator / n, general_denumerator / n);
+	return new Rational(general_numerator / n, general_denumerator / n);
 }
 
-Rational Rational::operator-(Rational a)
+const Rational & Rational::operator-(const Rational & a)
 {
 	int general_denumerator = nok(this->denumerator, a.denumerator);
 	int general_numerator = this->numerator * (general_denumerator / this->denumerator)
 		- a.numerator * (general_denumerator / a.denumerator);
 	int n = nod(general_numerator, general_denumerator);
-	return Rational(general_numerator / n, general_denumerator / n);
+	return new Rational(general_numerator / n, general_denumerator / n);
 }
 
-Rational Rational::operator*(Rational a)
+const Rational & Rational::operator*(const Rational & a)
 {
 	int general_denumerator = this->denumerator * a.denumerator;
 	int general_numerator = this->numerator * a.numerator;
@@ -53,7 +71,7 @@ Rational Rational::operator*(Rational a)
 	return Rational(general_numerator / n, general_denumerator / n);
 }
 
-Rational Rational::operator/(Rational a)
+const Rational & Rational::operator/(const Rational & a)
 {
 	int general_denumerator = this->denumerator * a.numerator;
 	int general_numerator = this->numerator * a.denumerator;
@@ -61,7 +79,7 @@ Rational Rational::operator/(Rational a)
 	return Rational(general_numerator / n, general_denumerator / n);
 }
 
-void Rational::operator+=(Rational a)
+const Rational & Rational::operator+=(const Rational & a)
 {
 	int general_denumerator = nok(this->denumerator, a.denumerator);
 	int general_numerator = this->numerator * (general_denumerator / this->denumerator)
@@ -69,9 +87,10 @@ void Rational::operator+=(Rational a)
 	int n = nod(general_numerator, general_denumerator);
 	this->numerator = general_numerator / n;
 	this->denumerator = general_denumerator / n;
+	return *this;
 }
 
-void Rational::operator-=(Rational a)
+const Rational & Rational::operator-=(const Rational & a)
 {
 	int general_denumerator = nok(this->denumerator, a.denumerator);
 	int general_numerator = this->numerator * (general_denumerator / this->denumerator)
@@ -79,31 +98,34 @@ void Rational::operator-=(Rational a)
 	int n = nod(general_numerator, general_denumerator);
 	this->numerator = general_numerator / n;
 	this->denumerator = general_denumerator / n;
+	return *this;
 }
 
-void Rational::operator*=(Rational a)
+const Rational & Rational::operator*=(const Rational & a)
 {
 	int general_denumerator = this->denumerator * a.denumerator;
 	int general_numerator = this->numerator * a.numerator;
 	int n = nod(general_numerator, general_denumerator);
 	this->numerator = general_numerator / n;
 	this->denumerator = general_denumerator / n;
+	return *this;
 }
 
-void Rational::operator/=(Rational a)
+const Rational & Rational::operator/=(const Rational & a)
 {
 	int general_denumerator = this->denumerator * a.numerator;
 	int general_numerator = this->numerator * a.denumerator;
 	int n = nod(general_numerator, general_denumerator);
 	this->numerator = general_numerator / n;
 	this->denumerator = general_denumerator / n;
+	return *this;
 }
 
-const int Rational::GetNumerator() {
+int Rational::GetNumerator() const {
 	return this->numerator;
 }
 
-const int Rational::GetDenumerator() {
+int Rational::GetDenumerator() const {
 	return this->denumerator;
 }
 
@@ -129,12 +151,17 @@ void Rational::SetValues(int numerator, int denumerator) {
 	this->denumerator = denumerator / n;
 }
 
-const std::string Rational::toString()
+float Rational::toFloat() const
+{
+	return (float)this->numerator / this->denumerator;
+}
+
+std::string Rational::toString() const
 {
 	return std::string(std::to_string(this->numerator) + "/" + std::to_string(this->denumerator));
 }
 
-const int Rational::nod(int a, int b)
+int Rational::nod(int a, int b)
 {
 	while (a != b) {
 		if (a > b) {
@@ -147,7 +174,7 @@ const int Rational::nod(int a, int b)
 	return a;
 }
 
-const int Rational::nok(int a, int b)
+int Rational::nok(int a, int b)
 {
 	return (a * b) / nod(a, b);
 }
