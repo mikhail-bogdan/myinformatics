@@ -25,5 +25,5 @@ public:
 
 private:
 	int time;
-	char data[9];
+	char data[10];
 };

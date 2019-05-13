@@ -69,20 +69,27 @@ Time::operator int() {
 	return this->time;
 }
 
+int mod(int n) {
+	if (n < 0) return -n;
+	return n;
+}
+
 Time::operator char*()
 {
 	int secs, mins, hours;
-	hours = (this->time / 3600) % 24;
-	mins = (this->time / 60) % 60;
-	secs = this->time % 60;
-	this->data[0] = '0' + hours / 10;
-	this->data[1] = '0' + hours % 10;
-	this->data[2] = ':';
-	this->data[3] = '0' + mins / 10;
-	this->data[4] = '0' + mins % 10;
-	this->data[5] = ':';
-	this->data[6] = '0' + secs / 10;
-	this->data[7] = '0' + secs % 10;
-	this->data[8] = '\0';
+	hours = (mod(this->time) / 3600) % 24;
+	mins = (mod(this->time) / 60) % 60;
+	secs = mod(this->time) % 60;
+	int i = 0;
+	if (this->time < 0) this->data[i++] = '-';
+	this->data[i++] = '0' + hours / 10;
+	this->data[i++] = '0' + hours % 10;
+	this->data[i++] = ':';
+	this->data[i++] = '0' + mins / 10;
+	this->data[i++] = '0' + mins % 10;
+	this->data[i++] = ':';
+	this->data[i++] = '0' + secs / 10;
+	this->data[i++] = '0' + secs % 10;
+	this->data[i++] = '\0';
 	return this->data;
 }
