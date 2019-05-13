@@ -11,15 +11,16 @@ public:
 	Rational(float value);
 	~Rational();
 
-	const Rational & operator=(const Rational & a);
-	const Rational & operator+(const Rational & a);
-	const Rational & operator-(const Rational & a);
-	const Rational & operator*(const Rational & a);
-	const Rational & operator/(const Rational & a);
-	const Rational & operator+=(const Rational & a);
-	const Rational & operator-=(const Rational & a);
-	const Rational & operator*=(const Rational & a);
-	const Rational & operator/=(const Rational & a);
+	Rational operator=(const Rational & a);
+	Rational operator+(const Rational & a);
+	Rational operator-(const Rational & a);
+	Rational operator*(const Rational & a);
+	Rational operator/(const Rational & a);
+	Rational operator+=(const Rational & a);
+	Rational operator-=(const Rational & a);
+	Rational operator*=(const Rational & a);
+	Rational operator/=(const Rational & a);
+
 
 
 	int GetNumerator() const;

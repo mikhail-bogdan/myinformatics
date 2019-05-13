@@ -11,18 +11,21 @@ public:
 	Polynomial(const Polynomial * p);
 	~Polynomial();
 
-	const Polynomial & operator=(const Polynomial & a);
-	const Polynomial & operator+(const Polynomial & a);
-	const Polynomial & operator*(const Polynomial & a);
-	const Polynomial & operator*(const Rational & value);
-	const Polynomial & operator*(int value);
+	Polynomial operator=(const Polynomial & a);
+	Polynomial operator+(const Polynomial & a);
+	Polynomial operator*(const Polynomial & a);
+	Polynomial operator*(const Rational & value);
+	Polynomial operator*(int value);
 
-	const Polynomial & operator+=(const Polynomial & a);
-	const Polynomial & operator*=(const Polynomial & a);
+	Polynomial operator+=(const Polynomial & a);
+	Polynomial operator*=(const Polynomial & a);
+	Polynomial operator*=(const Rational & value);
+	Polynomial operator*=(int value);
+
 
 	std::string toString() const;
 
 private:
-	int values = 0;
+	int count = 0;
 	Rational * data = nullptr;
 };

@@ -20,8 +20,10 @@ public:
 	void operator++();
 	void operator--();
 	operator int();
+	operator char*();
 
 
 private:
 	int time;
+	char data[9];
 };
