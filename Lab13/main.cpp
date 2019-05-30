@@ -3,13 +3,9 @@
 
 int main() {
 	Time time;
-	time = -1213;
+	time = 10000;
 	std::cout << (char*)time << std::endl;
-	time += time + 1;
-	std::cout << (char*)time << std::endl;
-	time -= 7;
-	std::cout << (char*)time << std::endl;
-	time = 1213;
+	time = time + 200;
 	std::cout << (char*)time << std::endl;
 	int a = time;
 	std::getchar();

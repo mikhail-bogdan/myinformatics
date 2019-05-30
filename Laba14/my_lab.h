@@ -2,6 +2,7 @@
 
 #include <list>
 #include <random>
+#include <iostream>
 
 
 class IMatrix{
@@ -11,9 +12,8 @@ public:
 	virtual void Set(double value, int x, int y) = 0;
 	virtual double Get(int x, int y) const = 0;
 	//virtual void Copy(IMatrix &matrix);
-	virtual void Add(IMatrix &matrix);
-	virtual void Mul(IMatrix &matrix);
-	virtual void SetRandom(int nulls);
+	virtual void Add(IMatrix & matrix);
+	virtual void SetRandom();
 protected:
 	int sizex, sizey;
 };
@@ -24,7 +24,9 @@ public:
 	~UsualMatrix();
 
 	void Set(double value, int x, int y);
-	double Get(int x, int y); //const;
+	double Get(int x, int y) const;
+
+	void Mul(const IMatrix & matrix);
 private:
 	double ** data;
 };
@@ -34,6 +36,7 @@ private:
 class SparseMatrix : public IMatrix {
 public:
 	class Node {
+	public:
 		int index;
 		double value;
 	};
@@ -41,7 +44,9 @@ public:
 	~SparseMatrix();
 
 	void Set(double value, int x, int y);
-	double Get(int x, int y); //const;
+	double Get(int x, int y) const;
+
+	void Mul(const IMatrix & matrix);
 
 private:
 	std::list<Node> *nodes;

@@ -1,21 +1,30 @@
-//#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-
-char getkey() { return 'g'; }
+#include "my_lab.h"
+#include <vector>
 
 int main() {
-	char e[10] = { 'n' };
-	char n[5];
-	
-	scanf_s("%s", n, 5);
-	if (n[2] == getkey()) {
-		e[0] = 'y';
+	UsualMatrix matrix1(3, 3);
+	SparseMatrix matrix2(3, 3);
+	matrix1.SetRandom();
+	matrix2.SetRandom();
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+			std::cout << matrix1.Get(i, j) << " ";
+		std::cout << std::endl;
 	}
-	if (e[0] == 'y') {
-		printf("True");
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+			std::cout << matrix2.Get(i, j) << " ";
+		std::cout << std::endl;
 	}
-	else {
-		printf("False");
+	matrix1.Mul(matrix2);
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+			std::cout << matrix1.Get(i, j) << " ";
+		std::cout << std::endl;
 	}
 	getchar();
 	getchar();

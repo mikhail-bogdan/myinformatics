@@ -1,34 +1,63 @@
+/*
+Написать функцию, вычисляющую с заданной точностью eps, значение y = x ^ (1 / k)
+по итерационной формуле: y[0] = 1; y[n - 1] = y[n] + (x / (y[n] ^ (k - 1)) - y[n]) / k,
+где n = 0, 1, 2, ...
+*/
 #include <iostream>
-#include "lab.h"
+#include <cmath>
 #include <cstdlib>
-#include <string.h>
+#include <iomanip>
 
-const int size = 500;
+//для заголовочного файла
+/*
+#ifndef MY_H
+#define MY_H
 
-int main() {
-	setlocale(LC_ALL, "Russian");
-	FILE *fin;
-	char file1[15] = { 0 };
-	std::cout << "Написать программу, считывающую символьный файл в динамическую память целиком пословно, формируя массив указателей на слова. Отсортировать массив слов(указателей) и вывести все слова в алфавитном порядке." << std::endl << "Введите имя читаемого файла: ";
-	std::cin >> file1;
-	fopen_s(&fin, file1, "rt");
-	if (fin == NULL) {
-		return -1000;
+	float signification(int k, int x, int eps);
+
+#endif
+*/
+
+using namespace std;
+
+float signification(int k, int x, int eps) {
+	int deg = 0;
+	if (k < 0) {
+		deg = k;
+		k = -1 * k;
 	}
-	else {
-		char * ar = new char[4096];
-		int i = count_words(size, fin);
-		std::cout << std::endl << "Количество слов в файле = " << i << std::endl;
-		char ** pointers = new char*[i + 1];
-		fseek(fin, 0, SEEK_SET);
-		sort(i, size, fin, pointers, ar);
-		delete[] pointers;
-		delete[] ar;// ! Удаление до закрытия файла !
-		
+	float t = 0.0;
+	float *y = new float[eps];
+	int i = eps - 1;
+	y[i + 1] = 1.0;
+	while (i > 0) {
+		t = x / pow(y[i + 1], k - 1);
+		y[i] = y[i + 1] + ((t - y[i + 1]) / k);
+		i--;
 	}
-	fclose(fin);
-	std::cout << std::endl;
-	system("pause");
-	return 0;
+	if (deg < 0) y[i + 1] = 1 / y[i + 1];
+	return y[i + 1];
 }
 
+int main() {
+	int k = 0, x = 0, eps = 0;
+	double y = 0.0;
+	cout << "x = ";
+	cin >> x;
+	if (x < 0) {
+		cout << "x should be positive!\nTry again!";
+		exit(1);
+	}
+	cout << "k = ";
+	cin >> k;
+	cout << "Remember: the larger eps, the more accurate the result!\neps = ";
+	cin >> eps;
+	if (eps < 1) {
+		cout << "eps should be positive and not be equal to one!" << "\n" << "Try again!";
+		exit(1);
+	}
+	y = signification(k, x, eps);
+	cout << "y = " << setprecision(10) << y << endl;
+
+	return 0;
+}
