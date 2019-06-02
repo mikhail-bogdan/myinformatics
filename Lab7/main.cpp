@@ -4,17 +4,23 @@
 #include <cstdlib>
 #include <iomanip>
 
-
+class C : public Worker
+{
+public:
+	int calcSalary() {
+		return salary * coef;
+	}
+private:
+	int salary = 2;
+	int coef = 3;
+};
 
 int main()
 {
-	List l;
 	WorkerBase base;
-	base
-	auto d = new Worker;
-	l.Add(new Worker);
-	l.Add(new Worker);
-	l.Add(new Worker);
-	l.Add(d);
-	l.Erase(d);
+	base.add(new C);
+	C * c = new C;
+	base.add(c);
+	int d = base.calcTotalSalary();
+	return 0;
 }

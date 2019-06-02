@@ -18,10 +18,10 @@ public:
 	List();
 	~List();
 
-	void Add(Worker * data);
-	virtual void Erase(Worker * data);
-	virtual Worker * Find(int pos);
-	void RemoveAll();
+	void add(Worker * data);
+	virtual void erase(Worker * data);
+	virtual Worker * find(int pos);
+	void removeAll();
 
 protected:
 	Node * first = nullptr;

@@ -10,10 +10,10 @@ List::List()
 
 List::~List()
 {
-	this->RemoveAll();
+	this->removeAll();
 }
 
-void List::Add(Worker * data)
+void List::add(Worker * data)
 {
 	Node * node = new Node;
 	if (this->size == 0)
@@ -32,7 +32,7 @@ void List::Add(Worker * data)
 	size++;
 }
 
-void List::Erase(Worker * data)
+void List::erase(Worker * data)
 {
 	Node * n = nullptr;
 	for (Node * iter = this->first; iter != last; iter = iter->prev)
@@ -71,7 +71,7 @@ void List::Erase(Worker * data)
 	size--;
 }
 
-Worker * List::Find(int pos)
+Worker * List::find(int pos)
 {
 	if (pos >= size) return nullptr;
 	Node * iter = this->first->prev;
@@ -82,7 +82,7 @@ Worker * List::Find(int pos)
 	return iter->data;
 }
 
-void List::RemoveAll()
+void List::removeAll()
 {
 	Node * tmp;
 	if (this->size == 0) return;
