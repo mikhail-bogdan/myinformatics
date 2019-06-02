@@ -61,7 +61,7 @@ namespace my_lab
 	}
 
 	void free(void * ptr)
-	{
+	{	
 		if (my_lab::allocated_blocks.size() == 0) return;
 		for (auto iter = my_lab::allocated_blocks.begin(); iter != my_lab::allocated_blocks.end(); iter++)
 		{
@@ -75,7 +75,7 @@ namespace my_lab
 					{
 						i = it;
 						if (((char *)ptr) + (*iter).size > (*it).ptr) break;
-						block = &(*it);
+						block = &(*it--);
 						break;
 					}
 				}
@@ -84,8 +84,17 @@ namespace my_lab
 					mem_block bl;
 					bl.ptr = ptr;
 					bl.size = (*iter).size;
-					if (ptr != my_lab::memory_start)
+					if (my_lab::free_blocks.size() > 1)
+					{
+						if (i == my_lab::free_blocks.end())
+							my_lab::free_blocks.push_back(bl);
+						else
+							my_lab::free_blocks.insert(++i, bl);
+					}
+					else
+					{
 						my_lab::free_blocks.insert(i, bl);
+					}
 				}
 				else
 				{
@@ -101,8 +110,14 @@ namespace my_lab
 
 	void refactor_memory()
 	{
-		for (auto iter = my_lab::free_blocks.begin(); iter != my_lab::free_blocks.end()--; iter++)
+		bool flag = false;
+		for (auto iter = my_lab::free_blocks.begin(); iter != my_lab::free_blocks.end(); iter++)
 		{
+			if (flag)
+			{
+				flag = false;
+				iter--;
+			}
 			auto it = iter;
 			it++;
 			if (it == my_lab::free_blocks.end()) return;
@@ -110,6 +125,7 @@ namespace my_lab
 			{
 				(*iter).size += (*it).size;
 				my_lab::free_blocks.erase(it);
+				flag = true;
 			}
 		}
 	}

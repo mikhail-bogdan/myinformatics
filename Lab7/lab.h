@@ -1,5 +1,37 @@
 #pragma once
 
-int count_words(const int size, FILE *fin);
+class Worker
+{
+public:
+	virtual int calcSalary() = 0;
+};
 
-void sort(const int i, const int size, FILE *fin, char **arr, char * ar);
+class List
+{
+public:
+	struct Node
+	{
+		Worker * data;
+		Node * next;
+		Node * prev;
+	};
+	List();
+	~List();
+
+	void Add(Worker * data);
+	virtual void Erase(Worker * data);
+	virtual Worker * Find(int pos);
+	void RemoveAll();
+
+protected:
+	Node * first = nullptr;
+	Node * last = nullptr;
+	int size = 0;
+};
+
+class WorkerBase : public List
+{
+public:
+	int calcTotalSalary();
+};
+

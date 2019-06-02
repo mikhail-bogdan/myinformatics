@@ -1,19 +1,19 @@
 #include "my_lab.h"
 
-void IMatrix::Add(IMatrix & matrix)
+void IMatrix::Add(const IMatrix & matrix)
 {
-	if (matrix.GetSizeX() != this->sizex || matrix.GetSizeY() != this->sizey) return;
-	for (int i = 0; i < this->sizex; i++)
-		for (int j = 0; j < this->sizey; j++)
+	if (matrix.GetSizeX() != this->GetSizeX() || matrix.GetSizeY() != this->GetSizeY()) return;
+	for (int i = 0; i < this->GetSizeX(); i++)
+		for (int j = 0; j < this->GetSizeY(); j++)
 			this->Set(this->Get(i, j) + matrix.Get(i, j), i, j);
 }
 
 void IMatrix::SetRandom()
 {
 	int n = 0;
-	for (int i = 0; i < sizex; i++)
+	for (int i = 0; i < GetSizeX(); i++)
 	{
-		for (int j = 0; j < this->sizey; j++)
+		for (int j = 0; j < this->GetSizeY(); j++)
 		{
 			int r = rand() % 10;
 			while (r == 0) r = rand() % 10;
@@ -21,21 +21,11 @@ void IMatrix::SetRandom()
 		}
 		if (i % 10 == 0) {
 			n++;
-			std::cout << "             " << (char)13 << "Process: " << n << "%" << (char)13;
+			//std::cout << "             " << (char)13 << "Process: " << n << "%" << (char)13;
 		}
 	}
-	for (int i = 0; i < this->sizex; i++)
-		this->Set(0.0, i, rand() % this->sizey);
-}
-
-int IMatrix::GetSizeX() const
-{
-	return this->sizex;
-}
-
-int IMatrix::GetSizeY() const
-{
-	return this->sizey;
+	for (int i = 0; i < this->GetSizeX(); i++)
+		this->Set(0.0, i, rand() % this->GetSizeY());
 }
 
 UsualMatrix::UsualMatrix(int sizex, int sizey)
@@ -56,6 +46,16 @@ UsualMatrix::~UsualMatrix()
 		delete[] this->data[i];
 	}
 	delete[] this->data;
+}
+
+int UsualMatrix::GetSizeX() const
+{
+	return this->sizex;
+}
+
+int UsualMatrix::GetSizeY() const
+{
+	return this->sizey;
 }
 
 void UsualMatrix::Set(double value, int x, int y)
@@ -100,13 +100,24 @@ SparseMatrix::SparseMatrix(int sizex, int sizey)
 	this->sizex = sizex;
 	this->sizey = sizey;
 	this->nodes = new std::list<Node>[sizex];
-	this->nodes[2].insert(this->nodes[2].begin(), *(new Node));
+	//this->nodes[2].insert(this->nodes[2].begin(), *(new Node));
 }
 
 SparseMatrix::~SparseMatrix()
 {
 	delete[] this->nodes;
 }
+
+int SparseMatrix::GetSizeX() const
+{
+	return this->sizex;
+}
+
+int SparseMatrix::GetSizeY() const
+{
+	return this->sizey;
+}
+
 
 void SparseMatrix::Set(double value, int x, int y)
 {
@@ -155,6 +166,10 @@ void SparseMatrix::Mul(const IMatrix & matrix)
 			data[i][j] = sum;
 		}
 	}
+
+	for (int i = 0; i < this->sizex; i++)
+		for (int j = 0; j < this->sizey; j++)
+			this->Set(data[i][j], i, j);
 
 /*	for (int i = 0; i < this->sizex; i++)
 		delete[] this->data[i];
