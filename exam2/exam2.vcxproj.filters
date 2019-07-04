@@ -19,15 +19,4 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="1.bmp">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="2.bmp">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="test.bmp">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-  </ItemGroup>
 </Project>
