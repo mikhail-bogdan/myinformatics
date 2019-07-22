@@ -123,7 +123,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="wav_util.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="wav_util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="CRKYDR1.WAV" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
