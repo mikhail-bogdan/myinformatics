@@ -50,8 +50,6 @@ void fft(std::vector<int>& a, bool invert)
 {
 	int n = (int)a.size();
 
-
-
 	for (int i = 1, j = 0; i < n; ++i)
 	{
 		int bit = n >> 1;
@@ -79,6 +77,7 @@ void fft(std::vector<int>& a, bool invert)
 			}
 		}
 	}
+
 	if (invert)
 	{
 		int nrev = reverse(n, mod);
