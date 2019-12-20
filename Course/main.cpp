@@ -1,12 +1,32 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <vector>
 #include <chrono>
+#include <sstream>
+#include <algorithm>
+
 
 const int mod = 7340033;
 const int root = 5;
 const int root_1 = 4404020;
 const int root_pw = 1 << 20;
+
+void usage(std::string);
+void run_benchmark();
+void run_interactive();
+const std::string time_print(long long);
+
+bool my_strcmp(const char* a, const char* b)
+{
+	while (*a != 0 || *b != 0)
+	{
+		if (*a != *b) return false;
+		a++;
+		b++;
+	}
+	return *a == *b;
+}
 
 int max(int a, int b)
 {
@@ -70,9 +90,9 @@ void fft(std::vector<int>& a, bool invert)
 			int w = 1;
 			for (int j = 0; j < len / 2; ++j)
 			{
-				int  u = a[i + j], v = int(a[i + j + len / 2] * 1ll * w % mod);
-				a[i + j] = u + v < mod ? u + v : u + v - mod;
-				a[i + j + len / 2] = u - v >= 0 ? u - v : u + mod - v;
+				int  u = a[(long long)i + j], v = int(a[(long long)i + j + len / 2] * 1ll * w % mod);
+				a[(long long)i + j] = u + v < mod ? u + v : u + v - mod;
+				a[(long long)i + j + len / 2] = u - v >= 0 ? u - v : u + mod - v;
 				w = int(w * 1ll * wlen % mod);
 			}
 		}
@@ -122,52 +142,193 @@ void multiply(std::vector<int> a, std::vector<int> b, std::vector<int>& out)
 	for (int i = 0; i < n - 1; i++)
 	{
 		for (int j = 0; j < i; j++)
-			out[i] += a[j] * b[i - j];
-		out[i + 1] += out[i] / 10;
+			out[i] += a[j] * b[(long long)i - j];
+		out[(long long)i + 1] += out[i] / 10;
 		out[i] %= 10;
 	}
 }
 
 
-int main()
+int main(int argc, char ** argv)
 {
-	std::vector<int> a, b, out;
-	char n;
-	FILE* f;
-	fopen_s(&f, "input.txt", "r");
+	std::string input_filename, output_filename;
 
-	while ((n = fgetc(f)) != '\n') a.push_back(n - '0');
-	while ((n = fgetc(f)) != '\n') b.push_back(n - '0');
+	switch (argc)
+	{
+	case 2:
+		if (my_strcmp(argv[1], "-b") || my_strcmp(argv[1], "--bench"))
+			run_benchmark();
+		if (my_strcmp(argv[1], "-i") || my_strcmp(argv[1], "--interactive"))
+			run_interactive();
+		if (my_strcmp(argv[1], "-h") || my_strcmp(argv[1], "--help"))
+			usage(argv[0]);
+		usage(argv[0]);
+	case 3:
+		input_filename = argv[1];
+		output_filename = argv[2];
+		break;
+	default:
+		usage(argv[0]);
+	}
+
+	std::vector<int> a, b, out;
+	char c;
+	bool flag;
+
+	std::ifstream fin(input_filename);
+	std::ofstream fout(output_filename);
+
+	c = fin.get();
+	while (c != '\n')
+	{
+		if (c == 'q') exit(0);
+		a.push_back(c - '0');
+		c = fin.get();
+	}
+
+	
+	c = fin.get();
+	while (c != '\n')
+	{
+		if (c == 'q') exit(0);
+		b.push_back(c - '0');
+		c = fin.get();
+	}
+
 	std::reverse(a.begin(), a.end());
 	std::reverse(b.begin(), b.end());
 
-	std::chrono::high_resolution_clock clock;
-
-	auto tp1 = clock.now();
-	multiply(a, b, out);
-	auto tp2 = clock.now();
-
-	std::cout << "default multiplication: " << std::chrono::duration_cast<std::chrono::microseconds>(tp2 - tp1).count() << " microseconds" << std::endl;
-
-
-
-	tp1 = clock.now();
 	fast_multiply(a, b, out);
-	tp2 = clock.now();
 
-	std::cout << "fast multiplication: "<< std::chrono::duration_cast<std::chrono::microseconds>(tp2 - tp1).count() << " microseconds" << std::endl;
+	std::reverse(out.begin(), out.end());
 
-/*
-	bool flag = false;
+	flag = false;
 
 	for (auto iter = out.begin(); iter != out.end(); iter++)
 	{
 		if (*(iter) != 0) flag = true;
-		if(flag)
-			printf("%c", (char)('0' + *(iter)));
+		if (flag)
+			fout << (char)('0' + (*iter));
 	}
-*/
+	fout << "\n";
 
-	getchar();
+
 	return 0;
+}
+
+
+void usage(std::string line)
+{
+	std::cout << "Usage: " << line << " <input_file> <output_file>" << "\n" <<
+		"       or" << "\n" <<
+		"       " << line << " [options]" << "\n" <<
+		"Options:" << "\n"
+		"  -i, --interactive : interactive mode" << "\n" <<
+		"  -b, --bench : run benchmark" << "\n" <<
+		"  -h, --help : display this message" << "\n";
+	exit(0);
+}
+
+void run_benchmark()
+{
+	std::vector<int> number1, number2, result;
+	
+	for(int i = 0; i < 10000; i++)
+		for (int j = 9; j >= 0; j--)
+		{
+			number1.push_back(j);
+			number2.push_back((j + 6) % 10);
+		}
+
+	std::chrono::high_resolution_clock clock;
+	
+	std::cout << "benchmark running: 10000x10000 digits" << "\n";
+
+	auto tp1 = clock.now();
+	multiply(number1, number2, result);
+	auto tp2 = clock.now();
+
+	std::cout << "default multiply: " << time_print(std::chrono::duration_cast<std::chrono::milliseconds>(tp2 - tp1).count()) << "\n";
+
+	tp1 = clock.now();
+	fast_multiply(number1, number2, result);
+	tp2 = clock.now();
+
+	std::cout << "fast multiply: " << time_print(std::chrono::duration_cast<std::chrono::milliseconds>(tp2 - tp1).count()) << "\n";
+
+	std::cout << "finished" << "\n";
+
+	exit(0);
+}
+
+const std::string time_print(long long millis)
+{
+	std::stringstream out;
+	int ms = millis % 1000;
+	millis /= 1000;
+	int secs = millis % 60;
+	millis /= 60;
+	int mins = millis % 60;
+	millis /= 60;
+	int hours = millis;
+
+	if (hours)
+		out << hours << "h ";
+	if (mins)
+		out << mins << "m ";
+	if (secs)
+		out << secs << "s ";
+	out << ms << "ms";
+	return out.str();
+}
+
+
+void run_interactive()
+{
+	char c;
+	std::vector<int> a, b, out;
+	bool flag;
+	std::cout << "type q for exit" << "\n";
+	do
+	{
+		std::cout << "Enter first  number: ";
+		c = std::getchar();
+		while (c != '\n')
+		{
+			if (c == 'q') exit(0);
+			a.push_back(c - '0');
+			c = std::getchar();
+		}
+		
+		std::cout << "Enter second number: ";
+		c = std::getchar();
+		while (c != '\n')
+		{
+			if (c == 'q') exit(0);
+			b.push_back(c - '0');
+			c = std::getchar();
+		}
+
+		std::reverse(a.begin(), a.end());
+		std::reverse(b.begin(), b.end());
+
+		fast_multiply(a, b, out);
+
+		a.resize(0);
+		b.resize(0);
+
+		std::reverse(out.begin(), out.end());
+
+		std::cout << "Result: ";
+
+		flag = false;
+
+		for (auto iter = out.begin(); iter != out.end(); iter++)
+		{
+			if (*(iter) != 0) flag = true;
+			if (flag)
+				std::cout << (char)('0' + (*iter));
+		}
+		std::cout << "\n";
+	} while (1);
 }
