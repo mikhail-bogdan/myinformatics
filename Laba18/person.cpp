@@ -1,3 +1,4 @@
+#include <vector>
 #include "person.h"
 
 Person::Person(const Person& person)
@@ -30,29 +31,29 @@ int Person::load(const char* buf)
 	return firstSize + secondSize + 9;
 }
 
-char* Person::save(int& size)
+std::vector<char> Person::save()
 {
 	int firstSize = this->firstName.length(), secondSize = this->secondName.length();
-	size = firstSize + secondSize + 9;
-	char* buffer = new char[size], * buf = buffer;
+	std::vector<char> buffer(firstSize + secondSize + 9);
+	char* buf = buffer.data();
 
-	memcpy(buffer, this->firstName.c_str(), firstSize);
-	buffer += firstSize + 1;
-	(*(buffer - 1)) = 0;
+	memcpy(buf, this->firstName.c_str(), firstSize);
+	buf += firstSize + 1;
+	(*(buf - 1)) = 0;
 
-	memcpy(buffer, this->secondName.c_str(), secondSize);
-	buffer += secondSize + 1;
-	(*(buffer - 1)) = 0;
+	memcpy(buf, this->secondName.c_str(), secondSize);
+	buf += secondSize + 1;
+	(*(buf - 1)) = 0;
 
-	memcpy(buffer, (char*)& this->year, 2);
+	memcpy(buf, (char*)& this->year, 2);
 
 	if (this->gender)
-		(*(buffer + 1)) |= 0b10000000;
-	buffer += 2;
+		(*(buf + 1)) |= 0b10000000;
+	buf += 2;
 
-	memcpy(buffer, (char*)& this->passport, 5);
+	memcpy(buf, (char*)& this->passport, 5);
 	
-	return buf;
+	return buffer;
 }
 
 bool Person::operator==(const Person& person) const

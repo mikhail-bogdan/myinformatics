@@ -1,9 +1,7 @@
 #pragma once
 
 #include <list>
-#include <vector>
 #include <iostream>
-#include <fstream>
 
 #include "person.h"
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <iostream>
 
 class Person
@@ -16,7 +17,7 @@ public:
 	Person(const Person& person);
 
 	int load(const char* buf);
-	char* save(int& size);
+	std::vector<char> save();
 
 	friend std::ostream& operator<<(std::ostream& stream, const Person& person);
 	bool operator==(const Person& person) const;

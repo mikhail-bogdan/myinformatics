@@ -1,7 +1,5 @@
 #include "algorithm.h"
 
-
-
 /**
 Entry point
 **/

@@ -1,3 +1,5 @@
+#include <fstream>
+#include <vector>
 #include "database.h"
 
 void Database::add(const Person& person)
@@ -19,32 +21,32 @@ void Database::load(const std::string& filename)
 	int filesize = stream.tellg();
 	stream.seekg(0, std::ifstream::beg);
 
-	char* buf = new char[filesize];
-	stream.read(buf, filesize);
+	std::vector<char> buf(filesize);
+	stream.read(buf.data(), filesize);
 
 	Person person;
 
+	int pos = 0;
 	while (filesize > 0)
 	{
-		int size = person.load(buf);
+		int size = person.load(buf.data() + pos);
 		filesize -= size;
-		buf += size;
+		pos += size;
 		this->persons.push_back(person);
 	}
 }
 
 void Database::save(const std::string& filename)
 {
-	char* buf = nullptr;
-	int size = 0;
+	std::vector<char> buffer;
 
 	std::ofstream stream;
 	stream.open(filename, std::ofstream::out | std::ofstream::binary);
 
 	for (auto iter = this->persons.begin(); iter != this->persons.end(); iter++)
 	{
-		buf = (*iter).save(size);
-		stream.write(buf, size);
+		buffer = (*iter).save();
+		stream.write(buffer.data(), buffer.size());
 	}
 }
 
